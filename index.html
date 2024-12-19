@@ -99,27 +99,13 @@
             overflow: hidden;
         }
 
-        .semi-circle span {
-            width: 200px;
-            height: 100px;
-            background: #888;
+        /* Voltage Scale Line */
+        .line {
+            width: 2px;
+            height: 50px;
+            background: red;
             position: absolute;
-            top: 100px;
-            left: 0;
-            transform-origin: 50% 100%;
-            transform: rotate(0deg);
-            transition: transform 2s ease-in-out;
-        }
-
-        /* Arrow Indicator for Voltage */
-        .arrow {
-            width: 0;
-            height: 0;
-            border-left: 10px solid transparent;
-            border-right: 10px solid transparent;
-            border-top: 20px solid red;
-            position: absolute;
-            top: -10px;
+            top: 50px;
             left: 50%;
             transform-origin: center bottom;
             transform: rotate(0deg);
@@ -159,7 +145,7 @@
             <h2>Voltage</h2>
             <div class="scale semi-circle">
                 <span></span>
-                <div class="arrow"></div>
+                <div class="line"></div>
             </div>
             <div class="value" id="volt-value">Voltage: 0.0V</div>
         </div>
@@ -184,15 +170,15 @@
             display.textContent = `Temperature: ${value.toFixed(1)}°C`;
         }
 
-        // Function to animate the Voltage scale with arrow
+        // Function to animate the Voltage scale with line
         function updateVoltage() {
             const value = Math.random() * 0.5 + 0.3; // Range: 0.3-0.8
             const bar = document.querySelector('.semi-circle span');
-            const arrow = document.querySelector('.arrow');
+            const line = document.querySelector('.line');
             const display = document.getElementById('volt-value');
             const degree = (value - 0.3) / 0.5 * 180;
             bar.style.transform = `rotate(${degree}deg)`;
-            arrow.style.transform = `rotate(${degree}deg)`;
+            line.style.transform = `rotate(${degree}deg)`;
             display.textContent = `Voltage: ${value.toFixed(2)}V`;
         }
 
@@ -207,4 +193,4 @@
         window.onload = updateAll;
     </script>
 </body>
-  </html>
+                </html>
