@@ -1,0 +1,210 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>pH, Temperature, and Voltage Indicator</title>
+
+    <!-- Import Orbitron Font -->
+    <link href="https://fonts.googleapis.com/css2?family=Orbitron:wght@400;700&display=swap" rel="stylesheet">
+
+    <style>
+        /* Global Styles */
+        body {
+            font-family: 'Orbitron', sans-serif;
+            background: url('https://i.imgur.com/L63xq2W.png') no-repeat center center fixed;
+            background-size: cover;
+            margin: 0;
+            padding: 20px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            flex-wrap: wrap;
+            justify-content: center;
+            gap: 20px;
+            width: 100%;
+            max-width: 1200px;
+        }
+
+        .box {
+            background: rgba(255, 255, 255, 0.8);
+            border-radius: 15px;
+            padding: 20px;
+            width: calc(100% - 40px);
+            max-width: 400px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.2);
+            text-align: center;
+        }
+
+        .ph-section, .temperature-section, .voltage-section {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+        }
+
+        .scale {
+            position: relative;
+            margin: 20px 0;
+            width: 100%;
+        }
+
+        /* pH Bar */
+        .ph-bar {
+            height: 20px;
+            border-radius: 10px;
+            background: linear-gradient(to right, #FFB6B6 50%, #B6D0FF 50%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .ph-bar span {
+            height: 20px;
+            display: block;
+            background: #888;
+            width: 0;
+            transition: width 2s ease-in-out;
+        }
+
+        /* Vertical Bar (Temperature) */
+        .vertical-bar {
+            width: 20px;
+            height: 200px;
+            border-radius: 10px;
+            background: linear-gradient(to top, #FFB6B6, #B6D0FF);
+            position: relative;
+        }
+
+        .vertical-bar span {
+            width: 20px;
+            height: 0;
+            display: block;
+            background: #888;
+            position: absolute;
+            bottom: 0;
+            transition: height 2s ease-in-out;
+        }
+
+        /* Semi-Circular (Voltage) */
+        .semi-circle {
+            width: 200px;
+            height: 100px;
+            border-radius: 100px 100px 0 0;
+            background: conic-gradient(#FFB6B6 50%, #B6D0FF 50%);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .semi-circle span {
+            width: 200px;
+            height: 100px;
+            background: #888;
+            position: absolute;
+            top: 100px;
+            left: 0;
+            transform-origin: 50% 100%;
+            transform: rotate(0deg);
+            transition: transform 2s ease-in-out;
+        }
+
+        /* Arrow Indicator for Voltage */
+        .arrow {
+            width: 0;
+            height: 0;
+            border-left: 10px solid transparent;
+            border-right: 10px solid transparent;
+            border-top: 20px solid red;
+            position: absolute;
+            top: -10px;
+            left: 50%;
+            transform-origin: center bottom;
+            transform: rotate(0deg);
+            transition: transform 2s ease-in-out;
+        }
+
+        /* Value Display */
+        .value {
+            font-size: 20px;
+            font-weight: bold;
+            margin-top: 10px;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <!-- pH Section -->
+        <div class="box ph-section">
+            <h2>pH Indicator</h2>
+            <div class="scale ph-bar">
+                <span></span>
+            </div>
+            <div class="value" id="ph-value">pH: 0</div>
+        </div>
+
+        <!-- Temperature Section -->
+        <div class="box temperature-section">
+            <h2>Temperature</h2>
+            <div class="scale vertical-bar">
+                <span></span>
+            </div>
+            <div class="value" id="temp-value">Temperature: 0°C</div>
+        </div>
+
+        <!-- Voltage Section -->
+        <div class="box voltage-section">
+            <h2>Voltage</h2>
+            <div class="scale semi-circle">
+                <span></span>
+                <div class="arrow"></div>
+            </div>
+            <div class="value" id="volt-value">Voltage: 0.0V</div>
+        </div>
+    </div>
+
+    <script>
+        // Function to animate the pH bar
+        function updatePH() {
+            const value = Math.random() * 14;
+            const bar = document.querySelector('.ph-bar span');
+            const display = document.getElementById('ph-value');
+            bar.style.width = (value / 14) * 100 + '%';
+            display.textContent = `pH: ${value.toFixed(1)}`;
+        }
+
+        // Function to animate the Temperature bar
+        function updateTemperature() {
+            const value = Math.random() * 50 + 30; // Range: 30-80
+            const bar = document.querySelector('.vertical-bar span');
+            const display = document.getElementById('temp-value');
+            bar.style.height = ((value - 30) / 50) * 100 + '%';
+            display.textContent = `Temperature: ${value.toFixed(1)}°C`;
+        }
+
+        // Function to animate the Voltage scale with arrow
+        function updateVoltage() {
+            const value = Math.random() * 0.5 + 0.3; // Range: 0.3-0.8
+            const bar = document.querySelector('.semi-circle span');
+            const arrow = document.querySelector('.arrow');
+            const display = document.getElementById('volt-value');
+            const degree = (value - 0.3) / 0.5 * 180;
+            bar.style.transform = `rotate(${degree}deg)`;
+            arrow.style.transform = `rotate(${degree}deg)`;
+            display.textContent = `Voltage: ${value.toFixed(2)}V`;
+        }
+
+        // Run all updates
+        function updateAll() {
+            updatePH();
+            updateTemperature();
+            updateVoltage();
+        }
+
+        // Trigger updates on page load
+        window.onload = updateAll;
+    </script>
+</body>
+  </html>
